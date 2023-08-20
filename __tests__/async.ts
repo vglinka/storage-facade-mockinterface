@@ -24,6 +24,39 @@ it('Async: read/write', async () => {
   expect(getMockStorage(storage).get('value')).toEqual({ c: [40, 42] });
 });
 
+it('Async: different names', async () => {
+  const storage = createStorage({
+    use: new MockInterface(),
+    name: 'settings',
+  });
+
+  await storage.open();
+
+  storage.value = 10;
+  await storage.value;
+
+  expect(await storage.value).toEqual(10);
+
+  const storage2 = createStorage({
+    use: new MockInterface(),
+    name: 'settings2',
+  });
+
+  expect(await storage.value).toEqual(10);
+  expect(await storage2.value).toEqual(undefined);
+
+  storage2.value = 20;
+  await storage2.value;
+
+  expect(await storage.value).toEqual(10);
+  expect(await storage2.value).toEqual(20);
+
+  await storage.clear();
+
+  expect(await storage.value).toEqual(undefined);
+  expect(await storage2.value).toEqual(20);
+});
+
 it(`Async: case-sensitive`, async () => {
   const storage = createStorage({
     use: new MockInterface(),
