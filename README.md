@@ -118,11 +118,13 @@ try {
   
   // When writing, accesses to first-level keys are intercepted only,
   // so if you need to make changes inside the object,
-  // you need to make changes and then assign it to the first level key
-  const updatedValue = storage.value; // Get object
-  updatedValue.data = [10, 45]; // Make changes
+  // you need to make changes and then assign it to the first level key.
+  // Get object
+  const updatedValue = storage.value as Record<string, unknown>;
+  // Make changes
+  updatedValue.data = [10, 45];
   storage.value = updatedValue; // Update storage, successfully written
-  console.log(storage.value.data); // [10, 45]
+  console.log((storage.value as Record<string, unknown>).data); // [10, 45]
   
   delete storage.value;
   console.log(storage.value); // undefined
@@ -334,9 +336,11 @@ and then assign it to the first level key.
 
 Assigning keys of the second or more levels will not give any effect.
 
+sync:
+
 ```TypeScript
   // Read
-  console.log(storage.value.user.data); // Ok
+  console.log((storage.value as Record<string, unknown>).user.data); // Ok
 
   // Write
   // Don't do that
@@ -346,6 +350,10 @@ Assigning keys of the second or more levels will not give any effect.
 Instead, use the following approach:
 
 ```TypeScript
+  // Read
+  console.log((storage.value as Record<string, unknown>).user.data); // Ok
+
+  // Write
   // Get object
   const updatedValue = storage.value;
   // Make changes
@@ -357,6 +365,12 @@ Instead, use the following approach:
 async:
 
 ```TypeScript
+  // Read
+  console.log(
+    ((await storage.value) as Record<string, unknown>).user.data
+  ); // Ok
+
+  // Write
   // Get object
   const updatedValue = (await storage.value) as Record<string, unknown>;
   // Make changes
