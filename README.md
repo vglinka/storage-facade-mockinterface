@@ -73,6 +73,11 @@ import { MockInterface } from 'storage-facade-mockinterface';
     ((await storage.value) as Record<string, unknown>).data
   ); // [10, 45]
   
+  // OR
+  const value = (await storage.value) as Record<string, unknown>;
+  console.log(value.data); // [10, 45]
+  
+  // Delete value
   delete storage.value;
   await storage.value; // Successfully deleted
   
@@ -83,6 +88,7 @@ import { MockInterface } from 'storage-facade-mockinterface';
   
   console.log(await storage.value); // 30
   
+  // Clear storage
   await storage.clear();
   console.log(await storage.value); // undefined
 })();
