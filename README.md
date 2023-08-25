@@ -66,7 +66,7 @@ import { MockInterface } from 'storage-facade-mockinterface';
   await storage.value; // Successfully written
 
   // Read value
-  console.log(await storage.value.data); // [10, 45]
+  console.log(((await storage.value) as Record<string, unknown>).data); // [10, 45]
   
   delete storage.value;
   await storage.value; // Successfully deleted
