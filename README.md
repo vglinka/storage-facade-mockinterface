@@ -66,7 +66,7 @@ import { MockInterface } from 'storage-facade-mockinterface';
   await storage.value; // Successfully written
 
   // Read value
-  console.log(await storage.value); // { data: [10, 45] }
+  console.log(await storage.value.data); // [10, 45]
   
   delete storage.value;
   await storage.value; // Successfully deleted
@@ -99,8 +99,16 @@ const storage = createStorage({
 // If an initialization error occurs,
 // it will be thrown on the first attempt to read/write
 try {
-  storage.value = { c: [40, 42] };
-  console.log(storage.value); // { c: [40, 42] }
+  storage.value = { data: [40, 42] };
+  console.log(storage.value); // { data: [40, 42] }
+  
+  // When writing, accesses to first-level keys are intercepted only,
+  // so if you need to make changes inside the object,
+  // you need to make changes and then assign it to the first level key
+  const updatedValue = storage.value; // Get object
+  updatedValue.data = [10, 45]; // Make changes
+  storage.value = updatedValue; // Update storage, successfully written
+  console.log(storage.value.data); // [10, 45]
   
   delete storage.value;
   console.log(storage.value); // undefined
