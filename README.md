@@ -62,10 +62,13 @@ import { MockInterface } from 'storage-facade-mockinterface';
   
   // When writing, accesses to first-level keys are intercepted only,
   // so if you need to make changes inside the object,
-  // you need to make changes and then assign it to the first level key
-  const updatedValue = await storage.value; // Get object
-  updatedValue.data = [10, 45]; // Make changes
-  storage.value = updatedValue; // Update storage
+  // you need to make changes and then assign it to the first level key.
+  // Get object
+  const updatedValue = (await storage.value) as Record<string, unknown>;
+  // Make changes
+  updatedValue.data = [10, 45];
+  // Update storage
+  storage.value = updatedValue;
   await storage.value; // Successfully written
 
   // Read value
@@ -355,7 +358,7 @@ async:
 
 ```TypeScript
   // Get object
-  const updatedValue = await storage.value;
+  const updatedValue = (await storage.value) as Record<string, unknown>;
   // Make changes
   updatedValue.user.data = 42;
   // Update storage
