@@ -57,6 +57,9 @@ import { MockInterface } from 'storage-facade-mockinterface';
   // After the assignment, wait for the write operation to complete
   await storage.value; // Successfully written
   
+  // Read value
+  console.log(await storage.value); // { data: [40, 42] }
+  
   // When writing, accesses to first-level keys are intercepted only,
   // so if you need to make changes inside the object,
   // you need to make changes and then assign it to the first level key
@@ -66,7 +69,9 @@ import { MockInterface } from 'storage-facade-mockinterface';
   await storage.value; // Successfully written
 
   // Read value
-  console.log(((await storage.value) as Record<string, unknown>).data); // [10, 45]
+  console.log(
+    ((await storage.value) as Record<string, unknown>).data
+  ); // [10, 45]
   
   delete storage.value;
   await storage.value; // Successfully deleted
