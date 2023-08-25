@@ -340,24 +340,24 @@ sync:
 
 ```TypeScript
   // Read
-  console.log((storage.value as Record<string, unknown>).user.data); // Ok
+  console.log((storage.value as Record<string, unknown>).data); // Ok
 
   // Write
   // Don't do that
-  storage.value.user.data = 42; // no effect
+  storage.value.data = 42; // no effect
 ```
 
 Instead, use the following approach:
 
 ```TypeScript
   // Read
-  console.log((storage.value as Record<string, unknown>).user.data); // Ok
+  console.log((storage.value as Record<string, unknown>).data); // Ok
 
   // Write
   // Get object
-  const updatedValue = storage.value;
+  const updatedValue = storage.value as Record<string, unknown>;
   // Make changes
-  updatedValue.user.data = 42;
+  updatedValue.data = 42;
   // Update storage
   storage.value = updatedValue; // Ок
 ```
@@ -367,14 +367,14 @@ async:
 ```TypeScript
   // Read
   console.log(
-    ((await storage.value) as Record<string, unknown>).user.data
+    ((await storage.value) as Record<string, unknown>).data
   ); // Ok
 
   // Write
   // Get object
   const updatedValue = (await storage.value) as Record<string, unknown>;
   // Make changes
-  updatedValue.user.data = 42;
+  updatedValue.data = 42;
   // Update storage
   storage.value = updatedValue; 
   await storage.value // Ок
