@@ -16,6 +16,7 @@ import {
   type StorageFacade,
   type Base,
   defaultStorageName,
+  Ok,
 } from 'storage-facade';
 
 interface DelaySetup {
@@ -50,15 +51,13 @@ export class MockInterface extends StorageInterface {
   storage = new Map<string, unknown>();
 
   // Async
-  async initAsync<T extends StorageInterface>(
-    setup: Setup<T>
-  ): Promise<undefined | Error> {
+  async initAsync<T extends StorageInterface>(setup: Setup<T>): Promise<Error | Ok> {
     return wait({
-      resolve: { data: undefined },
+      resolve: { data: new Ok() },
       action: () => {
         this.storageName = setup.name ?? defaultStorageName;
       },
-    }) as Promise<Error | undefined>;
+    }) as Promise<Error | Ok>;
   }
 
   async getItemAsync(key: string): Promise<Error | unknown> {
@@ -67,31 +66,31 @@ export class MockInterface extends StorageInterface {
     });
   }
 
-  async setItemAsync(key: string, value: unknown): Promise<Error | undefined> {
+  async setItemAsync(key: string, value: unknown): Promise<Error | Ok> {
     return wait({
-      resolve: { data: undefined },
+      resolve: { data: new Ok() },
       action: () => {
         this.storage.set(key, structuredClone(value));
       },
-    }) as Promise<Error | undefined>;
+    }) as Promise<Error | Ok>;
   }
 
-  async removeItemAsync(key: string): Promise<Error | undefined> {
+  async removeItemAsync(key: string): Promise<Error | Ok> {
     return wait({
-      resolve: { data: undefined },
+      resolve: { data: new Ok() },
       action: () => {
         this.storage.delete(key);
       },
-    }) as Promise<Error | undefined>;
+    }) as Promise<Error | Ok>;
   }
 
-  async clearAsync(): Promise<Error | undefined> {
+  async clearAsync(): Promise<Error | Ok> {
     return wait({
-      resolve: { data: undefined },
+      resolve: { data: new Ok() },
       action: () => {
         this.storage.clear();
       },
-    }) as Promise<Error | undefined>;
+    }) as Promise<Error | Ok>;
   }
 
   async sizeAsync(): Promise<Error | number> {
@@ -107,9 +106,9 @@ export class MockInterface extends StorageInterface {
   }
 
   // Sync
-  initSync<T extends StorageInterface>(setup: Setup<T>): Error | undefined {
+  initSync<T extends StorageInterface>(setup: Setup<T>): Error | Ok {
     this.storageName = setup.name ?? defaultStorageName;
-    return undefined;
+    return new Ok();
   }
 
   getItemSync(key: string): unknown {
