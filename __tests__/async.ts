@@ -103,6 +103,27 @@ it(`Async: ref problem (need structuredClone)`, async () => {
   }
 });
 
+it('Async: delete storage', async () => {
+  const storage = createStorage({
+    use: new MockInterface(),
+    name: 'settings',
+  });
+
+  await storage.open();
+
+  storage.value = 42;
+  await storage.value;
+
+  await storage.deleteStorage();
+
+  expect.assertions(1);
+  try {
+    await storage.value;
+  } catch (e) {
+    expect((e as Error).message).toMatch('Storage is deleted');
+  }
+});
+
 it('Async: addDefault', async () => {
   const storage = createStorage({
     use: new MockInterface(),

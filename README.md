@@ -20,6 +20,7 @@ npm install storage-facade storage-facade-mockinterface
 - `.clear()` - removes all key-value pairs from the storage
 - `.getEntries()` async only, returns an array of promises to iterate
 - `.entries()` sync only, returns an array of key-value pairs
+- `.deleteStorage()` - delete storage
 - `.size()` - returns the number of key-value pairs
 - `.key(index: number)` - returns the name of the key by its index
 
@@ -94,6 +95,9 @@ import { MockInterface } from 'storage-facade-mockinterface';
   // Clear storage
   await storage.clear();
   console.log(await storage.value); // undefined
+  
+  // Delete storage
+  await storage.deleteStorage();
 })();
 ```
 
@@ -123,7 +127,8 @@ try {
   const updatedValue = storage.value as Record<string, unknown>;
   // Make changes
   updatedValue.data = [10, 45];
-  storage.value = updatedValue; // Update storage, successfully written
+  // Update storage
+  storage.value = updatedValue; // Ok
   console.log((storage.value as Record<string, unknown>).data); // [10, 45]
   
   delete storage.value;
@@ -134,6 +139,9 @@ try {
   
   storage.clear();
   console.log(storage.value); // undefined
+  
+  // Delete storage
+  storage.deleteStorage();
 } catch (e) {
   console.error((e as Error).message);
 }
@@ -383,8 +391,8 @@ async:
 ## Don't use banned key names
 
 There is a list of key names that cannot be used because they are the same
-as built-in method names: [`open`, `clear`, `size`, `key`, `getEntries`,
-`entries`, `addDefault`, `setDefault`, `getDefault`, `clearDefault`].
+as built-in method names: [`open`, `clear`, `deleteStorage`, `size`, `key`,
+`getEntries`, `entries`, `addDefault`, `setDefault`, `getDefault`, `clearDefault`].
 
 Use the `keyIsNotBanned` function to check the key if needed.
 
