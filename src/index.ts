@@ -81,6 +81,8 @@ export class MockInterface extends StorageInterface {
 
   deleteStorageSync(): void {
     this.checkStorage();
+    // There should be logic for deleting real storage
+    this.storage.clear();
     this.isDeleted = true;
   }
 
@@ -157,6 +159,7 @@ export class MockInterface extends StorageInterface {
   async deleteStorageAsync(): Promise<Error | Ok> {
     return this.wait({
       action: () => {
+        // There should be logic for deleting real storage
         this.storage.clear();
         this.isDeleted = true;
       },
