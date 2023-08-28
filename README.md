@@ -97,7 +97,10 @@ import { MockInterface } from 'storage-facade-mockinterface';
   console.log(await storage.value); // undefined
   
   // Delete storage
+  // The array of keys will also be removed
   await storage.deleteStorage();
+  // An error will be thrown when trying to access
+  // console.log(await storage.value); // Error: 'This Storage was deleted!'
 })();
 ```
 

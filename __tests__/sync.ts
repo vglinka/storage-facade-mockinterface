@@ -114,7 +114,7 @@ it('Sync: delete storage', () => {
     // eslint-disable-next-line no-console
     console.log(storage.value);
   } catch (e) {
-    expect((e as Error).message).toMatch('Storage is deleted');
+    expect((e as Error).message).toMatch('This Storage was deleted!');
   }
 });
 

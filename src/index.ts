@@ -40,7 +40,7 @@ export class MockInterface extends StorageInterface {
   storage: Map<string, unknown> = new Map<string, unknown>();
 
   checkStorage(): void {
-    if (this.isDeleted) throw Error('Storage is deleted');
+    if (this.isDeleted) throw Error('This Storage was deleted!');
   }
 
   // Sync
@@ -90,7 +90,7 @@ export class MockInterface extends StorageInterface {
   private async wait(setup: DelaySetup): Promise<unknown> {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (this.isDeleted) reject(Error('Storage is deleted'));
+        if (this.isDeleted) reject(Error('This Storage was deleted!'));
         const bothSet = setup.resolve !== undefined && setup.reject !== undefined;
         const bothNotSet = setup.resolve === undefined && setup.reject === undefined;
         if (bothSet || bothNotSet)
