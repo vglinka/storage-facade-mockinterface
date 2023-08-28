@@ -49,6 +49,7 @@ import { MockInterface } from 'storage-facade-mockinterface';
   const storage = createStorage({
     use: new MockInterface(), // Here is your interface
     name: 'settings', // Storage name, optional
+    delay: [10, 100], // Mock, optional, `[from, to]`, default: [10, 100]
   });
 
   // Make sure the storage was initialized without error
@@ -143,9 +144,9 @@ try {
   console.log(storage.value); // undefined
   
   // Delete storage
-  await storage.deleteStorage();
+  storage.deleteStorage();
   // An error will be thrown when trying to access
-  // console.log(await storage.value); // Err: 'This Storage was deleted!'
+  // console.log(storage.value); // Err: 'This Storage was deleted!'
 } catch (e) {
   console.error((e as Error).message);
   // If you are not using TypeScript replace this line with

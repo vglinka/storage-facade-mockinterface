@@ -6,11 +6,11 @@
 // option.
 
 import { createStorage } from 'storage-facade';
-import { MockInterface, getMockStorage } from '../src/index';
+import { MockInterface as TestedInterface, getMockStorage } from '../src/index';
 
 it('Sync: read/write', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     name: 'settings',
     asyncMode: false,
   });
@@ -23,7 +23,7 @@ it('Sync: read/write', () => {
 
 it('Sync: different names', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
     name: 'settings',
   });
@@ -33,7 +33,7 @@ it('Sync: different names', () => {
   expect(storage.value).toEqual(10);
 
   const storage2 = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
     name: 'settings2',
   });
@@ -54,7 +54,7 @@ it('Sync: different names', () => {
 
 it(`Sync: case-sensitive`, () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -69,7 +69,7 @@ it(`Sync: case-sensitive`, () => {
 
 it(`Sync: ref problem (need structuredClone)`, () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -86,7 +86,7 @@ it(`Sync: ref problem (need structuredClone)`, () => {
 
   // Test new session
   const newStorage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -100,7 +100,7 @@ it(`Sync: ref problem (need structuredClone)`, () => {
 
 it('Sync: delete storage', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     name: 'settings',
     asyncMode: false,
   });
@@ -120,7 +120,7 @@ it('Sync: delete storage', () => {
 
 it('Sync: addDefault', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -141,7 +141,7 @@ it('Sync: addDefault', () => {
 
 it('Sync: getDefault', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -152,7 +152,7 @@ it('Sync: getDefault', () => {
 
 it('Sync: setDefault', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -167,7 +167,7 @@ it('Sync: setDefault', () => {
 
 it('Sync: clearDefault', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -181,7 +181,7 @@ it('Sync: clearDefault', () => {
 
 it('Sync: delete key', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -202,7 +202,7 @@ it('Sync: delete key', () => {
 
 it('Sync: clear storage', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -221,7 +221,7 @@ it('Sync: clear storage', () => {
 
 it('Sync: size', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -235,7 +235,7 @@ it('Sync: size', () => {
 
 it('Sync: key', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 
@@ -248,7 +248,7 @@ it('Sync: key', () => {
 
 it('Sync: iter', () => {
   const storage = createStorage({
-    use: new MockInterface(),
+    use: new TestedInterface(),
     asyncMode: false,
   });
 

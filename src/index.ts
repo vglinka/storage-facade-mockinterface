@@ -19,6 +19,8 @@ import {
   Ok,
 } from 'storage-facade';
 
+export const defaultDelay = [10, 100];
+
 interface DelaySetup {
   resolve?: { data: unknown };
   reject?: { data: unknown };
@@ -27,6 +29,7 @@ interface DelaySetup {
 }
 
 export const randomInRange = (min: number, max: number): number => {
+  if (min === 0 && max === 0) return 0;
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
@@ -89,6 +92,7 @@ export class MockInterface extends StorageInterface {
   // Async
   private async wait(setup: DelaySetup): Promise<unknown> {
     return new Promise((resolve, reject) => {
+      const delay = (setup.delay ?? defaultDelay) as [number, number];
       setTimeout(() => {
         if (this.isDeleted) reject(Error('This Storage was deleted!'));
         const bothSet = setup.resolve !== undefined && setup.reject !== undefined;
@@ -98,7 +102,7 @@ export class MockInterface extends StorageInterface {
         setup.action?.();
         if (setup.resolve !== undefined) resolve(setup.resolve.data);
         if (setup.reject !== undefined) reject(setup.reject.data);
-      }, setup.delay ?? randomInRange(10, 100));
+      }, setup.delay ?? randomInRange(...delay));
     });
   }
 
