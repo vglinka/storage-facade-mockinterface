@@ -143,9 +143,13 @@ try {
   console.log(storage.value); // undefined
   
   // Delete storage
-  storage.deleteStorage();
+  await storage.deleteStorage();
+  // An error will be thrown when trying to access
+  // console.log(await storage.value); // Err: 'This Storage was deleted!'
 } catch (e) {
   console.error((e as Error).message);
+  // If you are not using TypeScript replace this line with
+  // console.error(e.message);
 }
 ```
 
