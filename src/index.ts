@@ -79,7 +79,7 @@ export class MockInterface extends StorageInterface {
 
   keySync(index: number): string {
     this.checkStorage();
-    return Array.from(this.storage)[index][0];
+    return Array.from(this.storage)[index]?.[0];
   }
 
   deleteStorageSync(): void {
@@ -156,7 +156,7 @@ export class MockInterface extends StorageInterface {
 
   async keyAsync(index: number): Promise<Error | string | undefined> {
     return this.wait({
-      resolve: { data: Array.from(this.storage)[index][0] },
+      resolve: { data: Array.from(this.storage)[index]?.[0] },
     }) as Promise<Error | string | undefined>;
   }
 
@@ -178,4 +178,11 @@ export const getMockStorage = (storage: StorageFacade): Map<string, unknown> => 
     Object.getPrototypeOf(storage)
   ) as Base<MockInterface>;
   return base.storageInterface.storage;
+};
+
+export const getBase = (storage: StorageFacade): Base<MockInterface> => {
+  const base = Object.getPrototypeOf(
+    Object.getPrototypeOf(storage)
+  ) as Base<MockInterface>;
+  return base;
 };
