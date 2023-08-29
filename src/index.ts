@@ -77,7 +77,7 @@ export class MockInterface extends StorageInterface {
     return this.storage.size;
   }
 
-  keySync(index: number): string {
+  keySync(index: number): string | undefined {
     this.checkStorage();
     return Array.from(this.storage)[index]?.[0];
   }

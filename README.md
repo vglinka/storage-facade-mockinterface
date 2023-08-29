@@ -9,14 +9,13 @@ the actual storage implementation.
 ## Installation
 
 ```sh
-npm install storage-facade storage-facade-mockinterface
+npm install storage-facade@4 storage-facade-mockinterface@4
 ```
 
 # Usage
 
 ## Storage methods
 
-- `.open()` - async only, returns a promise containing an initialization error or `undefined`
 - `.clear()` - removes all key-value pairs from the storage
 - `.getEntries()` async only, returns an array of promises to iterate
 - `.entries()` sync only, returns an array of key-value pairs
@@ -52,9 +51,12 @@ import { MockInterface } from 'storage-facade-mockinterface';
     delay: [10, 100], // Mock, optional, `[from, to]`, default: [10, 100]
   });
 
-  // Make sure the storage was initialized without error
-  await storage.open();
+  // If an error occurs at the initialization stage,
+  // it will be thrown at the first attempt
+  // to access the storage (read, write, all methods except
+  // 'addDefault, setDefault, getDefault, clearDefault')
 
+  // Write
   storage.value = { data: [40, 42] };
   // After the assignment, wait for the write operation to complete
   await storage.value; // Successfully written
@@ -117,10 +119,14 @@ const storage = createStorage({
   //         ^^^^^
 });
 
-// If an initialization error occurs,
-// it will be thrown on the first attempt to read/write
+// If an error occurs at the initialization stage,
+// it will be thrown at the first attempt
+// to access the storage (read, write, all methods except
+// 'addDefault, setDefault, getDefault, clearDefault')
 try {
+  // Write
   storage.value = { data: [40, 42] };
+  // Read
   console.log(storage.value); // { data: [40, 42] }
   
   // When writing, accesses to first-level keys are intercepted only,
@@ -164,8 +170,6 @@ import { MockInterface } from 'storage-facade-mockinterface';
   const storage = createStorage({
     use: new MockInterface(),
   });
-
-  await storage.open();
 
   storage.value = 4;
   await storage.value;
@@ -235,8 +239,6 @@ import { MockInterface } from 'storage-facade-mockinterface';
   const storage = createStorage({
     use: new MockInterface(),
   });
-
-  await storage.open();
 
   console.log(await storage.value) // undefined
 
@@ -398,7 +400,7 @@ async:
 ## Don't use banned key names
 
 There is a list of key names that cannot be used because they are the same
-as built-in method names: [`open`, `clear`, `deleteStorage`, `size`, `key`,
+as built-in method names: [`clear`, `deleteStorage`, `size`, `key`,
 `getEntries`, `entries`, `addDefault`, `setDefault`, `getDefault`, `clearDefault`].
 
 Use the `keyIsNotBanned` function to check the key if needed.
