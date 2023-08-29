@@ -90,7 +90,7 @@ export class MockInterface extends StorageInterface {
   }
 
   // Async
-  private async wait(setup: DelaySetup): Promise<unknown> {
+  async wait(setup: DelaySetup): Promise<unknown> {
     return new Promise((resolve, reject) => {
       const delay = (setup.delay ?? defaultDelay) as [number, number];
       setTimeout(() => {
