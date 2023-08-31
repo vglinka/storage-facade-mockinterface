@@ -6,7 +6,26 @@
 // option.
 
 import { createStorage } from 'storage-facade';
-import { MockInterface as TestedInterface, getMockStorage } from '../src/index';
+import { MockInterface as TestedInterface, getBase, getMockStorage } from '../src/index';
+
+it(`Sync: need cleaning before each test (start)`, () => {
+  const storage = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  storage.value = 'data from the previous test';
+  expect(storage.value).toEqual('data from the previous test');
+});
+
+it(`Sync: need cleaning before each test (end)`, () => {
+  const storage = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  expect(storage.value).toEqual(undefined);
+});
 
 it('Sync: read/write', () => {
   const storage = createStorage({
@@ -116,6 +135,19 @@ it('Sync: delete storage', () => {
   } catch (e) {
     expect((e as Error).message).toMatch('This Storage was deleted!');
   }
+});
+
+it(`Sync: null and undefined`, () => {
+  const storage = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  storage.value = undefined;
+  expect(storage.value).toEqual(undefined);
+
+  storage.value = null;
+  expect(storage.value).toEqual(null);
 });
 
 it('Sync: addDefault', () => {
@@ -266,4 +298,136 @@ it('Sync: iter', () => {
     ['value', 4],
     ['other', 5],
   ]);
+});
+
+it(`Sync: delete key + iteration`, () => {
+  const storage = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  storage.value = 60;
+  storage.value2 = 50;
+  storage.value3 = 40;
+  storage.value4 = 30;
+
+  delete storage.value;
+  delete storage.value3;
+
+  expect(storage.value).toEqual(undefined);
+  expect(storage.value2).toEqual(50);
+  expect(storage.value3).toEqual(undefined);
+  expect(storage.value4).toEqual(30);
+
+  storage.value5 = 20;
+  storage.value = 1;
+  storage.value6 = 10;
+  storage.value8 = 0;
+  storage.value7 = 0;
+
+  const array = storage.entries();
+
+  expect(array).toEqual([
+    ['value2', 50],
+    ['value4', 30],
+    ['value5', 20],
+    ['value', 1],
+    ['value6', 10],
+    ['value8', 0],
+    ['value7', 0],
+  ]);
+});
+
+it(`Sync: initialized`, () => {
+  let base;
+
+  // Read
+  const storage = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  base = getBase(storage);
+  expect(base.initialized).toEqual(false);
+
+  // @ts-expect-error: no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const a = storage.value;
+  expect(base.initialized).toEqual(true);
+
+  // Write
+  const storage2 = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  base = getBase(storage2);
+  expect(base.initialized).toEqual(false);
+
+  storage2.value = 10;
+  expect(base.initialized).toEqual(true);
+
+  // Clear
+  const storage3 = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  base = getBase(storage3);
+  expect(base.initialized).toEqual(false);
+
+  storage3.clear();
+  expect(base.initialized).toEqual(true);
+
+  // getEntries
+  const storage4 = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  base = getBase(storage4);
+  expect(base.initialized).toEqual(false);
+
+  storage4.entries();
+  expect(base.initialized).toEqual(true);
+
+  // deleteStorage
+  const storage5 = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  base = getBase(storage5);
+  expect(base.initialized).toEqual(false);
+
+  storage5.deleteStorage();
+  expect(base.initialized).toEqual(true);
+
+  // size
+  const storage6 = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  base = getBase(storage6);
+  expect(base.initialized).toEqual(false);
+
+  // @ts-expect-error: no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const b = storage6.size();
+  expect(base.initialized).toEqual(true);
+
+  // key
+  const storage7 = createStorage({
+    use: new TestedInterface(),
+    asyncMode: false,
+  });
+
+  base = getBase(storage7);
+  expect(base.initialized).toEqual(false);
+
+  // @ts-expect-error: no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const c = storage7.key(0);
+  expect(base.initialized).toEqual(true);
 });
