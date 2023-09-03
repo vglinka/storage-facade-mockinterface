@@ -12,6 +12,8 @@ the actual storage implementation.
 npm install storage-facade@4 storage-facade-mockinterface@4
 ```
 
+There are similar libraries for other storages: [indexedDB](https://www.npmjs.com/package/storage-facade-indexeddb), [localStorage](https://www.npmjs.com/package/storage-facade-localstorage), [sessionStorage](https://www.npmjs.com/package/storage-facade-sessionstorage), [Map](https://www.npmjs.com/package/storage-facade-map).
+
 # Usage
 
 ## Storage methods
